@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Publicar prenda</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <h1>Publicar prenda</h1>
+
+  <form id="form">
+    <label>Estado</label>
+    <select id="estado">
+      <option value="Nueva">Nueva</option>
+      <option value="Segunda mano">Segunda mano</option>
+    </select>
+
+    <label>Categoría</label>
+    <select id="categoria">
+      <option value="Camisetas">Camisetas</option>
+      <option value="Pantalones">Pantalones</option>
+      <option value="Vestidos">Vestidos</option>
+      <option value="Zapatos">Zapatos</option>
+      <option value="Accesorios">Accesorios</option>
+      <option value="Otros">Otros</option>
+    </select>
+
+    <label>Foto (opcional)</label>
+    <input type="file" id="imagen" accept="image/*">
+
+    <label>Descripción</label>
+    <textarea id="descripcion"></textarea>
+
+    <label>Precio</label>
+    <input type="number" id="precio" min="0" step="0.01">
+
+    <label>Moneda</label>
+    <select id="moneda">
+      <option value="USD">USD</option>
+      <option value="CUP">CUP</option>
+      <option value="EUR">EUR</option>
+    </select>
+
+    <label>Contacto</label>
+    <input type="text" id="contacto">
+
+    <button type="submit">Publicar</button>
+  </form>
+
+  <script>
+    // Array compartido en memoria
+    window.mercaditoItems = window.mercaditoItems || [];
+
+    const form = document.getElementById('form');
+    const imagenInput = document.getElementById('imagen');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const estado = document.getElementById('estado').value;
+      const categoria = document.getElementById('categoria').value;
+      const descripcion = document.getElementById('descripcion').value.trim();
+      const precio = parseFloat(document.getElementById('precio').value);
+      const moneda = document.getElementById('moneda').value;
+      const contacto = document.getElementById('contacto').value.trim();
+      const file = imagenInput.files[0];
+
+      if (!descripcion || !contacto || isNaN(precio)) {
+        alert("Completa todos los campos obligatorios.");
+        return;
+      }
+
+      let img64 = "";
+      if (file) {
+        img64 = await fileToBase64(file);
+      }
+
+      window.mercaditoItems.push({
+        id: Date.now(),
+        estado, categoria, descripcion, precio, moneda, contacto,
+        img: img64
+      });
+
+      form.reset();
+      alert("Prenda publicada correctamente.");
+    });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
+
+</body>
+</html>
