@@ -12,13 +12,13 @@
 
   <form id="form">
     <label>Estado</label>
-    <select id="estado">
+    <select id="estado" required>
       <option value="Nueva">Nueva</option>
       <option value="Segunda mano">Segunda mano</option>
     </select>
 
     <label>Categoría</label>
-    <select id="categoria">
+    <select id="categoria" required>
       <option value="Camisetas">Camisetas</option>
       <option value="Pantalones">Pantalones</option>
       <option value="Vestidos">Vestidos</option>
@@ -31,53 +31,51 @@
     <input type="file" id="imagen" accept="image/*">
 
     <label>Descripción</label>
-    <textarea id="descripcion"></textarea>
+    <textarea id="descripcion" required></textarea>
 
     <label>Precio</label>
-    <input type="number" id="precio" min="0" step="0.01">
+    <input type="number" id="precio" min="0" step="0.01" required>
 
     <label>Moneda</label>
-    <select id="moneda">
+    <select id="moneda" required>
       <option value="USD">USD</option>
       <option value="CUP">CUP</option>
       <option value="EUR">EUR</option>
     </select>
 
     <label>Contacto</label>
-    <input type="text" id="contacto">
+    <input type="text" id="contacto" required>
 
     <button type="submit">Publicar</button>
   </form>
 
   <script>
-    // Array compartido en memoria
-   const STORAGE_KEY = "mercadito_items";
+    const STORAGE_KEY = "mercadito_items";
 
-function loadItems() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-}
+    function loadItems() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
 
-function saveItems(items) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
+    function saveItems(items) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
 
+    const form = document.getElementById("form");
+    const imagenInput = document.getElementById("imagen");
 
-    const form = document.getElementById('form');
-    const imagenInput = document.getElementById('imagen');
-
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const estado = document.getElementById('estado').value;
-      const categoria = document.getElementById('categoria').value;
-      const descripcion = document.getElementById('descripcion').value.trim();
-      const precio = parseFloat(document.getElementById('precio').value);
-      const moneda = document.getElementById('moneda').value;
-      const contacto = document.getElementById('contacto').value.trim();
+      const estado = document.getElementById("estado").value;
+      const categoria = document.getElementById("categoria").value;
+      const descripcion = document.getElementById("descripcion").value.trim();
+      const precio = parseFloat(document.getElementById("precio").value);
+      const moneda = document.getElementById("moneda").value;
+      const contacto = document.getElementById("contacto").value.trim();
       const file = imagenInput.files[0];
 
       if (!descripcion || !contacto || isNaN(precio)) {
-        alert("Completa todos los campos obligatorios.");
+        alert("Completa todos los campos.");
         return;
       }
 
@@ -86,10 +84,9 @@ function saveItems(items) {
         img64 = await fileToBase64(file);
       }
 
-     const items = loadItems();
-items.push({ id: Date.now(), estado, categoria, descripcion, precio, moneda, contacto, img: img64 });
-saveItems(items);
-
+      const items = loadItems();
+      items.push({ id: Date.now(), estado, categoria, descripcion, precio, moneda, contacto, img: img64 });
+      saveItems(items);
 
       form.reset();
       alert("Prenda publicada correctamente.");
