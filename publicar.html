@@ -51,7 +51,16 @@
 
   <script>
     // Array compartido en memoria
-    window.mercaditoItems = window.mercaditoItems || [];
+   const STORAGE_KEY = "mercadito_items";
+
+function loadItems() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+}
+
+function saveItems(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
 
     const form = document.getElementById('form');
     const imagenInput = document.getElementById('imagen');
@@ -77,11 +86,10 @@
         img64 = await fileToBase64(file);
       }
 
-      window.mercaditoItems.push({
-        id: Date.now(),
-        estado, categoria, descripcion, precio, moneda, contacto,
-        img: img64
-      });
+     const items = loadItems();
+items.push({ id: Date.now(), estado, categoria, descripcion, precio, moneda, contacto, img: img64 });
+saveItems(items);
+
 
       form.reset();
       alert("Prenda publicada correctamente.");
