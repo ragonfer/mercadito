@@ -14,10 +14,16 @@
   <div id="lista" class="list"></div>
 
   <script>
+    const STORAGE_KEY = "mercadito_items";
+
+function loadItems() {
+  const items = loadItems();
+
+}
+
     function render() {
       const lista = document.getElementById('lista');
-      const items = window.mercaditoItems || [];
-
+      
       lista.innerHTML = "";
 
       if (items.length === 0) {
