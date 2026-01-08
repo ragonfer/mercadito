@@ -16,14 +16,13 @@
   <script>
     const STORAGE_KEY = "mercadito_items";
 
-function loadItems() {
-  const items = loadItems();
-
-}
+    function loadItems() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
 
     function render() {
-      const lista = document.getElementById('lista');
-      
+      const items = loadItems();
+      const lista = document.getElementById("lista");
       lista.innerHTML = "";
 
       if (items.length === 0) {
@@ -34,15 +33,13 @@ function loadItems() {
       for (const it of items) {
         const el = document.createElement("div");
         el.className = "item";
-
         el.innerHTML = `
-          ${it.img ? `<img src="${it.img}">` : ""}
+          ${it.img ? `<img src="${it.img}" alt="Prenda">` : ""}
           <div class="price">${it.precio.toFixed(2)} ${it.moneda}</div>
           <div>${it.descripcion}</div>
           <div>Estado: ${it.estado} | Categoría: ${it.categoria}</div>
           <div>Contacto: ${it.contacto}</div>
         `;
-
         lista.appendChild(el);
       }
     }
