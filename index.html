@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mercadito de Ropa</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <h1>Mercadito de Ropa</h1>
+  <h2>Anuncios publicados</h2>
+
+  <div id="lista" class="list"></div>
+
+  <script>
+    function render() {
+      const lista = document.getElementById('lista');
+      const items = window.mercaditoItems || [];
+
+      lista.innerHTML = "";
+
+      if (items.length === 0) {
+        lista.innerHTML = "<p>No hay anuncios aún.</p>";
+        return;
+      }
+
+      for (const it of items) {
+        const el = document.createElement("div");
+        el.className = "item";
+
+        el.innerHTML = `
+          ${it.img ? `<img src="${it.img}">` : ""}
+          <div class="price">${it.precio.toFixed(2)} ${it.moneda}</div>
+          <div>${it.descripcion}</div>
+          <div>Estado: ${it.estado} | Categoría: ${it.categoria}</div>
+          <div>Contacto: ${it.contacto}</div>
+        `;
+
+        lista.appendChild(el);
+      }
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
